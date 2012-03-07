@@ -29,6 +29,7 @@
 
 package com.sumilux.ssi.client;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import com.sumilux.ssi.client.http.HttpRequest;
@@ -39,7 +40,7 @@ import com.sumilux.ssi.client.json.JSONTokener;
 
 public class IdmeClient {
 
-	private static final String DEFAULT_BASE_URL = "http://idmedemo.sumilux.com/smx/api";
+	private static final String DEFAULT_BASE_URL = "https://social-sign-in.com/smx/api";
 	private static String baseUrl = null;
 	private HttpRequest client;
 	private HttpResponse response;
@@ -76,26 +77,52 @@ public class IdmeClient {
 	public HttpResponse getResponse() {
 		return response;
 	}
+		
 	/**
-     * parse string into jsonobject
+     * parse string into jsonobject(Include sub-json)
      * @param para
-     * @return
+     * @return JSONObject/JSONArray
      * @throws IdmeException
      */
 	private Object parseJson(String para) throws IdmeException {
 		if (null == para || "".equals(para)) {
 			throw new IdmeException("Not found", 94);
 		}
-
+        return parseStrJson(para);
+	}
+	
+	/**
+     * parse string into jsonobject(Include sub-json)
+     * @param para
+     * @return JSONObject/JSONArray/String
+     * @throws IdmeException
+     */
+	@SuppressWarnings("unchecked")
+	private Object parseStrJson(String para) throws IdmeException {
 		try {
 			JSONTokener jsonTokener = new JSONTokener(para);
 			Object o = jsonTokener.nextValue();
 			if (o instanceof JSONObject) {
 				JSONObject jsonObj = (JSONObject) o;
-				return jsonObj;
-			} else {
+				JSONObject jsonRet = new JSONObject();
+				for (Iterator<Object> iter = jsonObj.keys(); iter.hasNext();) {
+					String key = (String)iter.next();
+					String value = jsonObj.get(key).toString();
+					if(value == null || "".equals(value)) {
+						jsonRet.accumulate(key, "");
+					} else {
+						jsonRet.accumulate(key, parseStrJson(value));
+					}
+			    }
+				return jsonRet.length() > 0 ? jsonRet : jsonObj;
+			} else if(o instanceof JSONArray){
 				JSONArray jsonArray = (JSONArray) o;
+				for(int i = 0; i < jsonArray.length(); i++) {
+					jsonArray.put(i, parseStrJson(jsonArray.get(i).toString()));
+				}
 				return jsonArray;
+			} else {
+				return o.toString();
 			}
 		} catch (Exception e) {
 			if (e instanceof IdmeException) {

@@ -32,7 +32,7 @@ package com.sumilux.ssi.client;
 /**
  * errCode 
  * 
- * @author yanhuiz
+ * @author kevin
  *  90  unknow Exception
  *  93  parameter error
  *  94  data not Found 

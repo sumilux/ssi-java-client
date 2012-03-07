@@ -1,5 +1,5 @@
 <%@ page session="true" language="java"  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
-	import="com.sumilux.idme.sdk.Idme,com.sumilux.idme.json.JSONObject, com.sumilux.idme.json.JSONArray"%>
+	import="com.sumilux.ssi.client.Idme,com.sumilux.ssi.client.json.JSONObject,com.sumilux.ssi.client.json.JSONArray"%>
 <%
 	String token = request.getSession().getAttribute("ssi_token") == null ? null : (String) request.getSession().getAttribute("ssi_token");
     String authSource = request.getParameter("authsource");

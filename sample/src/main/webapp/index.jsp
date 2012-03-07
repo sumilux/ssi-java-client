@@ -1,5 +1,5 @@
 <%@ page session="true" language="java"  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
-	import="com.sumilux.idme.sdk.Idme,com.sumilux.idme.json.JSONObject"%>
+	import="com.sumilux.ssi.client.Idme,com.sumilux.ssi.client.json.JSONObject"%>
 <%
 	String stat = request.getParameter("stat") == null ? null : (String) request.getParameter("stat");
 	JSONObject jo = null;
@@ -20,20 +20,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<link type="text/css" rel="stylesheet" href="http://demo.sumilux.com/ssi/download/ssi.css">
+<link type="text/css" rel="stylesheet" href="http://ssi.sumilux.com/ssi/download/ssi.css">
 <script type="text/javascript">
 window.SSI={
     tokenUrl:"http://172.25.1.96:8090/ssi/index.jsp", // replace __TOKEN_URL__ with your own callback URL
-    appName:"WidgetSample",
-    sig:"d2e6116e892af6a970167f9a3dcf0ea9",
-    owaUrl:"http://idmedemo.sumilux.com/smx/owa",
+    appName:"SSISample",
+    sig:"5380bc1d3002d4cd9e59151edf5247b2",
+    owaUrl:"https://social-sign-in.com/smx/owa",
     v:"v0.7.15",
     style:"small-icon",
     options:{}
 };
 (function(){
     var f=document.createElement("script");
-    f.type="text/javascript"; f.src="http://demo.sumilux.com/ssi/download/ssi.js";
+    f.type="text/javascript"; f.src="http://ssi.sumilux.com/ssi/download/ssi.js";
     var h=document.getElementsByTagName("script")[0];
     h.parentNode.insertBefore(f, h);
 })();
