@@ -1,5 +1,7 @@
 This is the Java client library and sample code for the Social Sign-In (SSI) service, by Sumilux
 
+This is test line #1
+
 We use Maven as our build tool. 
 
 1.CD "/ssi-sdk", run "mvn install"
