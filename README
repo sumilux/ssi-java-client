@@ -6,4 +6,7 @@ We use Maven as our build tool.
 2.CD "/ssi-sdk-sample/src/main/webapp", edit "index.jsp",paste the codes gotten from ssi site and replace of "__TOKEN_URL__" with your callback URL.
 3.start up ssi-sdk-sample
 
+Are you ready?
+
 That's all, Try it out Please...
+
