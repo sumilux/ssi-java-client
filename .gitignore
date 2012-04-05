@@ -1,2 +1,6 @@
 README.private
 .svn
+sdk/.classpath
+sdk/.project
+sdk/.settings
+target

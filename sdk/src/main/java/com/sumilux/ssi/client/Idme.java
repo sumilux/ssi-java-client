@@ -41,7 +41,8 @@ import com.sumilux.ssi.client.json.JSONException;
 import com.sumilux.ssi.client.json.JSONObject;
 
 /**
- * The Function set that Idme provides
+ * The Function set that Idme provides 
+ * and this is one and only entrance to invoke idme's function.
  * 
  * @author  kevin 2012/02/20
  * @version 1.0
@@ -81,6 +82,23 @@ public class Idme {
 		IdmeClient client = new IdmeClient("/auth/v1/expireToken");
 		try {
 			return "1".equals(((JSONObject) client.execute(queryParas)).get("result")) ? true : false;
+		} catch (JSONException e) {
+			throw new IdmeException(e);
+		}
+	}
+	
+    /** 
+     * Get the test user's token
+     * 
+     * @return String token
+     * @exception IdmeException
+     */
+	public static String allocateTestUser() throws IdmeException {
+		Map<String, String> emptyParas = new TreeMap<String, String>();
+		IdmeClient client = new IdmeClient("/auth/v1/allocateTestUser");
+		try {
+			JSONObject retJO = (JSONObject) client.execute(emptyParas);
+			return retJO.getString("ssi_token");
 		} catch (JSONException e) {
 			throw new IdmeException(e);
 		}

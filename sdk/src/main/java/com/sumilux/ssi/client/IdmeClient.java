@@ -40,7 +40,8 @@ import com.sumilux.ssi.client.json.JSONTokener;
 
 public class IdmeClient {
 
-	private static final String DEFAULT_BASE_URL = "https://social-sign-in.com/smx/api";
+	//private static final String DEFAULT_BASE_URL = "https://social-sign-in.com/smx/api";
+	private static final String DEFAULT_BASE_URL = "http://172.25.1.96:8670/smx/api";
 	private static String baseUrl = null;
 	private HttpRequest client;
 	private HttpResponse response;
