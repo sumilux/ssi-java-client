@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import com.sumilux.ssi.client.Idme;
 import com.sumilux.ssi.client.IdmeException;
+import com.sumilux.ssi.client.json.JSONArray;
 import com.sumilux.ssi.client.json.JSONException;
 import com.sumilux.ssi.client.json.JSONObject;
 
@@ -32,7 +33,8 @@ public class SimpleTest {
 			JSONObject jo = idme.getUserProfile();
 			assertNotNull(jo);
 			try {
-				assertTrue(jo.getJSONArray("emails").length() > 0);
+				String strEmail = jo.getJSONObject("data").get("emails").toString();
+				assertTrue(strEmail.contains("primary"));
 			} catch (JSONException e) {
 				assertTrue(false);
 				e.printStackTrace();
