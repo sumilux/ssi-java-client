@@ -3,4 +3,5 @@ README.private
 sdk/.classpath
 sdk/.project
 sdk/.settings
+sdk/idme-sdk-doc
 target
