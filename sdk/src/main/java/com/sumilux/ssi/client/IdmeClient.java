@@ -96,8 +96,12 @@ public class IdmeClient {
 		if(response.getCode() == 200) {
 			Object object = parseJson(response.getBody());
 			Map<String, String> headMap = response.getHeaders();
-			if(headMap.containsKey("SSI-expires")) {
-				cacheManager.putIntoCache(key, object, Integer.valueOf(headMap.get("SSI-expires")));
+			if(headMap.containsKey("Cache-Control")) {
+				String cahceControl = headMap.get("Cache-Control");
+				if(cahceControl.contains("max-age")) {
+					int expires = Integer.parseInt(cahceControl.split("=")[1]);
+				    cacheManager.putIntoCache(key, object, expires);
+				}
 			}
 			return object;
 	    } else {
