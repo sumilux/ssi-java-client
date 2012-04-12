@@ -7,4 +7,5 @@ sample/.classpath
 sample/.project
 sample/.settings
 sdk/idme-sdk-doc
+.settings
 target
