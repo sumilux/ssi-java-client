@@ -38,6 +38,7 @@ import com.sumilux.ssi.client.cache.CacheManager;
 import com.sumilux.ssi.client.http.HttpRequest;
 import com.sumilux.ssi.client.http.HttpResponse;
 import com.sumilux.ssi.client.json.JSONArray;
+import com.sumilux.ssi.client.json.JSONException;
 import com.sumilux.ssi.client.json.JSONObject;
 import com.sumilux.ssi.client.json.JSONTokener;
 
@@ -95,6 +96,14 @@ public class IdmeClient {
 		response = client.execute(queryParas);
 		if(response.getCode() == 200) {
 			Object object = parseJson(response.getBody());
+			if(object instanceof JSONObject && ((JSONObject)object).has("err_code")) {
+				JSONObject jo = (JSONObject) object;
+				try {
+					throw new IdmeException(jo.getString("err_msg"), jo.getString("err_code"));
+				} catch (JSONException e) {
+					throw new IdmeException(e.getMessage());
+				}
+			}
 			Map<String, String> headMap = response.getHeaders();
 			if(headMap.containsKey("Cache-Control")) {
 				String cahceControl = headMap.get("Cache-Control");
@@ -164,7 +173,7 @@ public class IdmeClient {
      */
 	private Object parseJson(String para) throws IdmeException {
 		if (null == para || "".equals(para)) {
-			throw new IdmeException("Not found", 94);
+			throw new IdmeException("Not found", "94");
 		}
         return parseStrJson(para);
 	}
