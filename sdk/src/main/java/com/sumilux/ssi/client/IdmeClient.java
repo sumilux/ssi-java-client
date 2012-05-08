@@ -29,25 +29,44 @@
 
 package com.sumilux.ssi.client;
 
+import java.security.MessageDigest;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
+import com.sumilux.ssi.client.cache.CacheManager;
 import com.sumilux.ssi.client.http.HttpRequest;
 import com.sumilux.ssi.client.http.HttpResponse;
 import com.sumilux.ssi.client.json.JSONArray;
+import com.sumilux.ssi.client.json.JSONException;
 import com.sumilux.ssi.client.json.JSONObject;
 import com.sumilux.ssi.client.json.JSONTokener;
 
+/**
+ * Provide the interface to the Idme to execute the request.
+ * 
+ * @author  kevin 2012/04/10
+ * @version 1.0
+ */
 public class IdmeClient {
 
 	private static final String DEFAULT_BASE_URL = "https://social-sign-in.com/smx/api";
 	//private static final String DEFAULT_BASE_URL = "http://172.25.1.96:8670/smx/api";
 	private static String baseUrl = null;
+	private static final int DEFAULT_CACHE_CAPACITY = 2000;
+	private String queryPath = null;
 	private HttpRequest client;
 	private HttpResponse response;
+	private CacheManager cacheManager;
+	
+	public IdmeClient(String path, int cacheCapacity) {
+		this.queryPath = path;
+		this.client = new HttpRequest(HttpRequest.GET, buildUrl(path));
+		this.cacheManager = new CacheManager(cacheCapacity);
+	}
 	
 	public IdmeClient(String path) {
-		client = new HttpRequest(HttpRequest.GET, buildUrl(path));
+		this(path, DEFAULT_CACHE_CAPACITY);
 	}
 	
 	public static void setBaseUrl(String url) {
@@ -62,14 +81,81 @@ public class IdmeClient {
 		return getBaseUrl() + path;
 	}
 	
+	/**
+     * Execute the http request for the specified url and query parameters
+     * But if the cache object is valid,will retrieve it from memory directly 
+     * @param queryParas The query parameters
+     * @return The response body's content
+     */
 	public Object execute(Map<String, String> queryParas) throws IdmeException {
+		String key = buildCacheKey(queryParas);
+		if(cacheManager.isValidCache(key)) {
+			System.out.println("retrieving the profile from cache");
+			return cacheManager.getFromCache(key).getObject();
+		}
 		response = client.execute(queryParas);
 		if(response.getCode() == 200) {
-			return parseJson(response.getBody());
+			Object object = parseJson(response.getBody());
+			if(object instanceof JSONObject && ((JSONObject)object).has("err_code")) {
+				JSONObject jo = (JSONObject) object;
+				try {
+					throw new IdmeException(jo.getString("err_msg"), jo.getString("err_code"));
+				} catch (JSONException e) {
+					throw new IdmeException(e.getMessage());
+				}
+			}
+			Map<String, String> headMap = response.getHeaders();
+			if(headMap.containsKey("Cache-Control")) {
+				String cahceControl = headMap.get("Cache-Control");
+				if(cahceControl.contains("max-age")) {
+					int expires = Integer.parseInt(cahceControl.split("=")[1]);
+				    cacheManager.putIntoCache(key, object, expires);
+				}
+			}
+			return object;
 	    } else {
 	    	throw new IdmeException(response.getBody());
 	    }
 	}
+	
+	/**
+     * Build the cache key with the query path and parameters
+     * @param queryParas The query parameters
+     * @return The cache's key
+     */
+	private String buildCacheKey(Map<String, String> queryParas) {
+		StringBuffer sb = new StringBuffer();
+		sb.append(this.queryPath);
+		Set<String> keySet = queryParas.keySet();
+		Iterator<String> it = keySet.iterator();
+		while (it.hasNext()) {
+			sb.append(it.next());
+        }
+		return getMD5Str(sb.toString());
+	}
+	
+    private String getMD5Str(String str) {
+    	final int HEX_FF = 0XFF;
+        byte[] byteArray = null;
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byteArray = md.digest(str.getBytes("UTF-8"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+        StringBuffer md5StrBuff = new StringBuffer();
+        for (int i = 0; i < byteArray.length; i++) {
+            if (Integer.toHexString(HEX_FF & byteArray[i]).length() == 1) {
+                md5StrBuff.append("0").append(
+                        Integer.toHexString(HEX_FF & byteArray[i]));
+            } else {
+                md5StrBuff.append(Integer.toHexString(HEX_FF & byteArray[i]));
+            }
+        }
+
+        return md5StrBuff.toString();
+    }
 	
 	public Map<String, String> getHeaders() {
 		return response.getHeaders();
@@ -87,7 +173,7 @@ public class IdmeClient {
      */
 	private Object parseJson(String para) throws IdmeException {
 		if (null == para || "".equals(para)) {
-			throw new IdmeException("Not found", 94);
+			throw new IdmeException("Not found", "94");
 		}
         return parseStrJson(para);
 	}

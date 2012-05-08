@@ -42,12 +42,24 @@ import java.util.TreeMap;
 
 import com.sumilux.ssi.client.IdmeException;
 
+/**
+ * HttpResponse that get the response with the HttpURLConnection 
+ * 
+ * @author  kevin 2012/04/10
+ * @version 1.0
+ */
 public class HttpResponse {
+	
 	private InputStream stream;
 	private Map<String, String> headers;
 	private String strBody;
 	private int code;
 	
+    /**
+     * Build the response with the HttpURLConnection
+     * @param conn The http connect to remote service address
+     * @return the response from remote url 
+     */
 	public HttpResponse(HttpURLConnection conn) throws IdmeException {
 		try {
 			conn.connect();
@@ -73,21 +85,30 @@ public class HttpResponse {
 		return code;
 	}
 	
+    /**
+     * Parse the HeaderMassage from the response into memory
+     * @param conn The http connect to remote service address
+     */
 	private void parseHeaders(HttpURLConnection conn) {
 		headers = new TreeMap<String, String>();
 		Set<String> headerSet = conn.getHeaderFields().keySet();
-		if (null == headers || headers.isEmpty()) {
+		if (null == headerSet || headerSet.isEmpty()) {
 			return;
 		}
 		for (String key : headerSet) {
 			List<String> value = conn.getHeaderFields().get(key);
-			if (null == value || value.isEmpty()) {
+			if (key == null || null == value || value.isEmpty()) {
 				continue;
 			}
-			headers.put(key, value.get(0));
+			String v = value.get(0);
+			headers.put(key, v);
 		}
 	}
 	
+    /**
+     * Parse the bodyMassage from the response into memory
+     * the format is json
+     */
 	private void parseBodyContents() throws IdmeException {
 		try {
 			final char[] buffer = new char[0x10000];
