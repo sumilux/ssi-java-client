@@ -218,7 +218,7 @@ public class Idme {
 		queryParas.put("token", token);
 		IdmeClient client = new IdmeClient("/user/v1/getUID");
 		try {
-			return ((JSONObject) client.execute(queryParas)).getString("UID");
+			return ((JSONObject) client.execute(queryParas)).getString("data");
 		} catch (JSONException e) {
 			throw new IdmeException(e);
 		}

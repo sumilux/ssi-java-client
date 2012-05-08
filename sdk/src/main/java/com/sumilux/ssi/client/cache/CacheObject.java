@@ -27,51 +27,75 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 */
 
-package com.sumilux.ssi.client;
+package com.sumilux.ssi.client.cache;
+
+import java.util.Date;
 
 /**
- * errCode 
+ * Helper class to hold the relational cache info.
+ * <p/>
  * 
- * @author kevin
- *  90  unknow Exception
- *  93  parameter error
- *  94  data not Found 
- *  95  no permission
- *  97  invalid token
- *  100 invalid service address
+ * @author  kevin 2012/04/10
+ * @version 1.0
  */
-public class IdmeException extends Exception {
+public class CacheObject {
+
+    /**
+     * The cache Object
+     */
+	private Object object;
+
+    /**
+     * The flush time
+     */
+	private Date flushDateTime;
 	
-	private static final long serialVersionUID = 1L;
-
-	public String getErrCode() {
-		return errCode;
-	}
-
-	public String getErrMsg() {
-		return errMsg;
-	}
-
-	protected String errCode;
-
-	protected String errMsg = null;
+    /**
+     * The expires of cache object
+     */
+	private long expires;
 	
-	public IdmeException(String errMsg) {
-		super(errMsg);
-		this.errMsg = errMsg;
+    /**
+     * Returns the expires of cache object
+     * @return the long value of this expires.
+     */
+	public long getExpires() {
+		return expires;
 	}
 
-	public IdmeException(Exception e) {
-		super(e);
+	public void setExpires(long expires) {
+		this.expires = expires;
 	}
 
-	public IdmeException(String errMsg, String errCode) {
-		super(errMsg);
-		this.errCode = errCode;
+    /**
+     * Returns cache object
+     * @return the object value.
+     */
+	public Object getObject() {
+		return object;
 	}
 
-	public IdmeException(String errMsg, Exception e){
-		super(errMsg, e);
-		this.errMsg = errMsg;
+    /**
+     * Set the cache object
+     * @param object the flush object.
+     */
+	public void setObject(Object object) {
+		this.object = object;
+	}
+
+    /**
+     * Returns the flush time of cache object
+     * @return the date value of flushDateTime
+     */
+	public Date getFlushDateTime() {
+		return flushDateTime;
+	}
+
+    /**
+     * Set the flushDateTime
+     * @param flushDateTime the flush date time.
+     */
+	public void setFlushDateTime(Date flushDateTime) {
+		this.flushDateTime = flushDateTime;
 	}
 }
