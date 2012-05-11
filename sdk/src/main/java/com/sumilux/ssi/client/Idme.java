@@ -156,7 +156,7 @@ public class Idme {
     /**
      * Get Auth source of token
      *
-     * @return JSON String({"authsource":"google"})
+     * @return JSON String({"result":"google"})
      * @exception IdmeException
      */
 	public JSONObject getMyAuthSource() throws IdmeException {

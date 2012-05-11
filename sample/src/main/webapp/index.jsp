@@ -23,7 +23,7 @@
 <link type="text/css" rel="stylesheet" href="http://ssi.sumilux.com/ssi/download/ssi.css">
 <script type="text/javascript">
 window.SSI={
-    tokenUrl:"http://172.25.1.96:8090/ssi/index.jsp", // replace __TOKEN_URL__ with your own callback URL
+    tokenUrl:"http://localhost:8090/ssi/index.jsp", // replace __TOKEN_URL__ with your own callback URL
     appName:"SSISample",
     sig:"5380bc1d3002d4cd9e59151edf5247b2",
     owaUrl:"https://social-sign-in.com/smx/owa",
