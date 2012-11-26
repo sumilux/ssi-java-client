@@ -34,21 +34,23 @@
  */
 package com.sumilux.ssi.client;
 
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.sumilux.ssi.client.http.HttpResponse;
 import com.sumilux.ssi.client.json.JSONException;
 import com.sumilux.ssi.client.json.JSONObject;
 
 /**
  * The Function set that Idme provides
  * 
- * @author  kevin 2012/02/20
+ * @author  kevin 2012/11/26
  * @version 1.0
  */
 public class Idme {
 
 	private String token;
+	TemplcateClient client = new TemplcateClient();
 
     /** 
      * Idme's constructor
@@ -57,7 +59,7 @@ public class Idme {
      */
 	public Idme(String token,String apiURL) throws IdmeException {
 		this.token = token;
-		IdmeClient.setBaseUrl(apiURL);
+		TemplcateClient.setBaseUrl(apiURL);
 	}
 	
     /** 
@@ -76,11 +78,9 @@ public class Idme {
      * @exception IdmeException
      */
 	public boolean expireToken() throws IdmeException {
-		Map<String, String> queryParas = new TreeMap<String, String>();
-		queryParas.put("token", token);
-		IdmeClient client = new IdmeClient("/auth/v1/expireToken");
 		try {
-			return "1".equals(((JSONObject) client.execute(queryParas)).get("result")) ? true : false;
+			HttpResponse response = client.execute("/auth/v2/expireToken", newList("ssi_token", token), null);
+			return TemplateParser.parserBoolean(response.getBody());
 		} catch (JSONException e) {
 			throw new IdmeException(e);
 		}
@@ -93,14 +93,8 @@ public class Idme {
      * @exception IdmeException
      */
 	public boolean isValidToken() throws IdmeException {
-		Map<String, String> queryParas = new TreeMap<String, String>();
-		queryParas.put("token", token);
-		IdmeClient client = new IdmeClient("/auth/v1/isValidToken");
-		try {
-			return "1".equals(((JSONObject) client.execute(queryParas)).get("result")) ? true : false;
-		} catch (JSONException e) {
-			throw new IdmeException(e);
-		}
+		HttpResponse response = client.execute("/auth/v2/isValidToken", newList("ssi_token", token), null);
+		return TemplateParser.parserBoolean(response.getBody());
 	}
 	
     /**
@@ -110,16 +104,9 @@ public class Idme {
      * @return true:match false:not match
      * @exception IdmeException
      */
-	public boolean isMatchAppNameAndSecret(String appName, String appSecret) throws IdmeException {
-		Map<String, String> queryParas = new TreeMap<String, String>();
-		IdmeClient client = new IdmeClient("/auth/v1/isMatchAppNameAndSecret");
-		queryParas.put("appName", appName);
-		queryParas.put("appSecret", appSecret);
-		try {
-			return "1".equals(((JSONObject) client.execute(queryParas)).get("result")) ? true : false;
-		} catch (JSONException e) {
-			throw new IdmeException(e);
-		}
+	public static boolean isMatchAppNameAndSecret(String appName, String appSecret) throws IdmeException {
+		HttpResponse response = (new TemplcateClient()).execute("/app/v2/isMatchAppNameAndSecret", null, newList("appName", appName, "appSecret", appSecret));
+		return TemplateParser.parserBoolean(response.getBody());
 	}
 	
     /**
@@ -129,64 +116,22 @@ public class Idme {
      * @exception IdmeException
      */
 	public JSONObject getIdentityAttr() throws IdmeException {
-		Map<String, String> queryParas = new TreeMap<String, String>();
-		queryParas.put("token", token);
-		IdmeClient client = new IdmeClient("/auth/v1/getIdentityAttr");
-		return (JSONObject) client.execute(queryParas);
+		HttpResponse response = client.execute("/auth/v2/getIdentityAttr", newList("ssi_token", token), null);
+		return TemplateParser.parserJSONObject(response.getBody());
 	}
 	
     /**
      * Get Auth source of token
      *
-     * @return JSON String({"authsource":"google"})
+     * @return String "google"
      * @exception IdmeException
      */
-	public JSONObject getMyAuthSource() throws IdmeException {
-		Map<String, String> queryParas = new TreeMap<String, String>();
-		queryParas.put("token", token);
-		IdmeClient client = new IdmeClient("/auth/v1/getMyAuthSource");
-		return (JSONObject) client.execute(queryParas);
+	public String getMyAuthSource() throws IdmeException {
+		HttpResponse response = client.execute("/user/v2/getUID", newList("ssi_token", token), null);
+		return TemplateParser.parserString(response.getBody());
 	}
 	//*********** auth info ***************
-	
-	//*********** photo info **************
-    /**
-     * Get user's album list
-     *
-     * @param appName widget name
-     * @return JSON String(reference the return value of auth source)
-     * @exception IdmeException
-     */
-	public JSONObject getUserAlbumList(String appName) throws IdmeException {
-		Map<String, String> queryParas = new TreeMap<String, String>();
-		queryParas.put("token", token);
-		queryParas.put("appName", appName);
-		IdmeClient client = new IdmeClient("/photo/v1/getUserAlbumList");
-		return (JSONObject) client.execute(queryParas);
-	}
-	
-    /**
-     * Get user's photos
-     *
-     * @param appName widget name
-     * @param albumid album ID (get by getUserAlbumList)
-     * @param pid picture ID
-     * @param password album's password
-     * @return JSON String(reference the return value of auth source)
-     * @exception IdmeException
-     */
-	public JSONObject getUserPhotos(String appName, String albumid, String pid, String password) throws IdmeException {
-		Map<String, String> queryParas = new TreeMap<String, String>();
-		queryParas.put("token", token);
-		queryParas.put("appName", appName);
-		queryParas.put("albumid", albumid);
-		queryParas.put("pid", pid);
-		queryParas.put("password", password);
-		IdmeClient client = new IdmeClient("/photo/v1/getUserPhotos");
-		return (JSONObject) client.execute(queryParas);
-	}
-	
-	//*********** photo info **************
+
 	
 	//*********** user info ***************
     /**
@@ -196,14 +141,8 @@ public class Idme {
      * @exception IdmeException
      */
 	public String getUID() throws IdmeException {
-		Map<String, String> queryParas = new TreeMap<String, String>();
-		queryParas.put("token", token);
-		IdmeClient client = new IdmeClient("/user/v1/getUID");
-		try {
-			return ((JSONObject) client.execute(queryParas)).getString("UID");
-		} catch (JSONException e) {
-			throw new IdmeException(e);
-		}
+		HttpResponse response = client.execute("/user/v2/getUID", newList("ssi_token", token), null);
+		return TemplateParser.parserString(response.getBody());
 	}
 	
     /**
@@ -214,10 +153,16 @@ public class Idme {
      * @exception IdmeException
      */
 	public JSONObject getUserProfile() throws IdmeException {
-		Map<String, String> queryParas = new TreeMap<String, String>();
-		queryParas.put("token", token);
-		IdmeClient client = new IdmeClient("/user/v1/getUserProfile");
-		return (JSONObject) client.execute(queryParas);
+		HttpResponse response = client.execute("/user/v2/getUserProfile", newList("ssi_token", token), null);
+		return TemplateParser.parserJSONObject(response.getBody());
 	}
 	//*********** user info ***************
+	
+    private static List<Parameter> newList(String... parameters) {
+        List<Parameter> list = new ArrayList<Parameter>(parameters.length / 2);
+        for (int p = 0; p + 1 < parameters.length; p += 2) {
+            list.add(new Parameter(parameters[p], parameters[p + 1]));
+        }
+        return list;
+    }
 }

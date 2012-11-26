@@ -31,6 +31,7 @@ package com.sumilux.ssi.client.http;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Map;
 
 import com.sumilux.ssi.client.IdmeException;
@@ -51,10 +52,17 @@ public class HttpRequest {
 		this.url = url;
 	}
 
-	public HttpResponse execute(Map<String, String> queryParas) throws IdmeException {
+	public HttpResponse execute(Collection<? extends Map.Entry> headerParas, Collection<? extends Map.Entry> queryParas) throws IdmeException {
 		try {
 			URL destURL = buildURI(url, queryParas);
 			conn = (HttpURLConnection) destURL.openConnection();
+			
+			if(headerParas != null) {
+			    for (Map.Entry p : headerParas) {
+				    conn.setRequestProperty(toString(p.getKey()), toString(p.getValue()));
+			    }
+			}
+			
 			conn.setRequestMethod(this.method);
             return new HttpResponse(conn);
 		} catch (Exception e) {
@@ -62,15 +70,15 @@ public class HttpRequest {
 		}
 	}
 
-	private URL buildURI(String url, Map<String, String> queryParas) throws IdmeException {
+	private URL buildURI(String url, Collection<? extends Map.Entry> queryParas) throws IdmeException {
 		try {
 			if(queryParas == null || queryParas.size() == 0) {
 				return new URL(url);
 			}
 			
 			StringBuffer stringBuffer = new StringBuffer();
-			for (String key : queryParas.keySet()) {
-				stringBuffer.append("&").append(key).append("=").append(queryParas.get(key));
+			for (Map.Entry p : queryParas) {
+				stringBuffer.append("&").append(toString(p.getKey())).append("=").append(toString(p.getValue()));
 			}
 			
 			if(url.contains("?")) {
@@ -86,5 +94,9 @@ public class HttpRequest {
 
 	public String getUrl() {
 		return url;
+	}
+	
+	private static String toString(Object from) {
+		return (from == null) ? null : from.toString();
 	}
 }

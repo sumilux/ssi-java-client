@@ -6,7 +6,7 @@ package com.sumilux.ssi.client.json;
  * @author JSON.org
  * @version 2010-12-24
  */
-public class JSONException extends Exception {
+public class JSONException extends RuntimeException {
 	private static final long serialVersionUID = 0;
 	private Throwable cause;
 

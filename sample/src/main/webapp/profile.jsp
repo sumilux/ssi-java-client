@@ -5,7 +5,7 @@
     JSONObject jo = new JSONObject();
     if(token != null) {
 		Idme idme = new Idme(token);
-		jo = idme.getUserProfile().getJSONObject("data");
+		jo = idme.getUserProfile();
 	}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

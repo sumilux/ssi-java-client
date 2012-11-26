@@ -32,7 +32,7 @@ package com.sumilux.ssi.client;
 /**
  * errCode 
  * 
- * @author kevin
+ *  @author kevin
  *  90  unknow Exception
  *  93  parameter error
  *  94  data not Found 
@@ -44,7 +44,7 @@ public class IdmeException extends Exception {
 	
 	private static final long serialVersionUID = 1L;
 
-	public int getErrCode() {
+	public String getErrCode() {
 		return errCode;
 	}
 
@@ -52,7 +52,7 @@ public class IdmeException extends Exception {
 		return errMsg;
 	}
 
-	protected int errCode;
+	protected String errCode;
 
 	protected String errMsg = null;
 	
@@ -65,8 +65,9 @@ public class IdmeException extends Exception {
 		super(e);
 	}
 
-	public IdmeException(String errMsg, int errCode) {
+	public IdmeException(String errMsg, String errCode) {
 		super(errMsg);
+		this.errMsg = errMsg;
 		this.errCode = errCode;
 	}
 

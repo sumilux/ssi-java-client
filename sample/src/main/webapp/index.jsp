@@ -11,8 +11,8 @@
 		request.getSession().setAttribute("ssi_token", token);
 		Idme idme = new Idme(token);
 		System.out.println(idme.getUserProfile().toString());
-		jo = idme.getUserProfile().getJSONObject("data");
-		authSource = idme.getMyAuthSource().getString("data");
+		jo = idme.getUserProfile();
+		authSource = idme.getMyAuthSource();
 	} else {
 		errorMsg = request.getParameter("errMsg");
 	}
@@ -48,7 +48,6 @@ window.SSI={
 	%>
 	</BR> Welcome <%=jo.getString("displayName")%>, Verified by <%= authSource%></BR>
 	<a href="profile.jsp">Identity Info</a></br>
-	<a href="photo.jsp?authsource=<%=authSource%>" >Photo Info</a></br>
 
 	<%
 		} else {
