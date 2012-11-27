@@ -1,2 +1,11 @@
 README.private
 .svn
+sdk/.classpath
+sdk/.project
+sdk/.settings
+sample/.classpath
+sample/.project
+sample/.settings
+sdk/idme-sdk-doc
+.settings
+target

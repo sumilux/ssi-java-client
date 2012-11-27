@@ -42,7 +42,8 @@ import com.sumilux.ssi.client.json.JSONException;
 import com.sumilux.ssi.client.json.JSONObject;
 
 /**
- * The Function set that Idme provides
+ * The Function set that Idme provides 
+ * and this is one and only entrance to invoke idme's function.
  * 
  * @author  kevin 2012/11/26
  * @version 1.0
@@ -123,7 +124,11 @@ public class Idme {
     /**
      * Get Auth source of token
      *
+<<<<<<< HEAD
      * @return String "google"
+=======
+     * @return JSON String({"result":"google"})
+>>>>>>> origin/dev
      * @exception IdmeException
      */
 	public String getMyAuthSource() throws IdmeException {

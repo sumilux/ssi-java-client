@@ -1,9 +1,16 @@
 This is the Java client library and sample code for the Social Sign-In (SSI) service, by Sumilux
 
+This is test line #1
+
 We use Maven as our build tool. 
 
-1.CD "/ssi-sdk", run "mvn install"
-2.CD "/ssi-sdk-sample/src/main/webapp", edit "index.jsp",paste the codes gotten from ssi site and replace of "__TOKEN_URL__" with your callback URL.
-3.start up ssi-sdk-sample
+1. Compile and install our SDK: cd "ssi-sdk", run "mvn install"
 
-That's all
+2. Our sample assumes the server can be accessed by the browser at 127.0.0.1 (we have a DNS name for it: localhost.sumilux.com). If that is not the case edit "ssi-sdk-sample/src/main/webapp/index.jsp", replace "localhost.sumilux.com" with whatever host name your browser can reach the server at. 
+
+3. Run the "ssi-sdk-sample" app, first "cd ssi-sdk-sample", then issue this simple command: mvn jetty:run
+
+4. Point your browser to http://localhost.sumilux.com:8090
+
+That's all, give it a try...
+

@@ -36,22 +36,59 @@ import java.util.Map;
 
 import com.sumilux.ssi.client.IdmeException;
 
+/**
+ * HttpRequest that sends the request to the remote url and 
+ * return the response
+ * 
+ * @author  kevin 2012/04/10
+ * @version 1.0
+ */
 public class HttpRequest {
 	
+    /**
+     * The request method: GET
+     */
     public static final String GET = "GET";
+    /**
+     * The request method: POST
+     */
     public static final String POST = "POST";
+    /**
+     * The request method: PUT
+     */
     public static final String PUT = "PUT";
+    /**
+     * The request method: DELETE
+     */
     public static final String DELETE = "DELETE";
     
+    /**
+     * Hold the request url
+     */
     private final String url;
+    /**
+     * Hold the request method
+     */
     private final String method;
 	private HttpURLConnection conn;
 
+    /**
+     * Initialize the HttpRequest.
+     * @param method The request method
+     * @param url The request url
+     */
 	public HttpRequest(String method, String url) {
 		this.method = method;
 		this.url = url;
 	}
 
+    /**
+     * Execute the request with the specified url and parameter
+     * return the response
+     * @param headerParas The header parameters
+     * @param queryParas The query parameters
+     * @return the response from remote url 
+     */
 	public HttpResponse execute(Collection<? extends Map.Entry> headerParas, Collection<? extends Map.Entry> queryParas) throws IdmeException {
 		try {
 			URL destURL = buildURI(url, queryParas);
