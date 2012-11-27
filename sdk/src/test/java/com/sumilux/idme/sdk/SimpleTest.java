@@ -1,14 +1,11 @@
 package com.sumilux.idme.sdk;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 import com.sumilux.ssi.client.Idme;
 import com.sumilux.ssi.client.IdmeException;
-import com.sumilux.ssi.client.json.JSONException;
-import com.sumilux.ssi.client.json.JSONObject;
 
 
 public class SimpleTest {
