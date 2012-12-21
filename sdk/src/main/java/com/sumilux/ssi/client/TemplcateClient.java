@@ -9,7 +9,7 @@ import com.sumilux.ssi.client.http.HttpResponse;
 
 public class TemplcateClient {
 
-	private static String baseUrl = "https://social-sign-in.com/smx/api";
+	private static String baseUrl = "http://10.0.90.95:8670/smx/api";
 	private static boolean isSSL = false;
 	
 	public static boolean isSSL() {
