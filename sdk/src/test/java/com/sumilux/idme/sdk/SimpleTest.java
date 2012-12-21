@@ -1,6 +1,6 @@
 package com.sumilux.idme.sdk;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -13,7 +13,7 @@ import com.sumilux.ssi.client.json.JSONObject;
 public class SimpleTest {
 	
 	private String testToken = "86336695cd994af1b54149741fcb7417";
-	private String ssiHost = "https://ss2.social-sign-in.com/smx/api";
+	private String ssiHost = "https://ssi2.social-sign-in.com/smx/api";
 	
 //	private String testToken = "5f5e3ff82403401f936bcdbf08c4f800";
 //	private String ssiHost = "http://hf.sumilux.com/smx/api";
