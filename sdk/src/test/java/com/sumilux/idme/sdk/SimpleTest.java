@@ -20,29 +20,29 @@ public class SimpleTest {
 	
 	
 	
-	@Test
-	public void testIsValidToken() {
-		try {
-			Idme idme = new Idme(testToken, ssiHost);
-			assertTrue(idme.isValidToken());
-		} catch (IdmeException e) {
-			e.printStackTrace();
-			assertTrue(false);
-		}
-	}
-	
-	@Test
-	public void testGetUserprofile() {
-		try {
-			Idme idme = new Idme(testToken, ssiHost);
-			JSONObject jo = idme.getUserProfile();
-			assertNotNull(jo);
-			System.out.println(jo);
-		} catch (IdmeException e) {
-			e.printStackTrace();
-			assertTrue(false);
-		}
-	}
+//	@Test
+//	public void testIsValidToken() {
+//		try {
+//			Idme idme = new Idme(testToken, ssiHost);
+//			assertTrue(idme.isValidToken());
+//		} catch (IdmeException e) {
+//			e.printStackTrace();
+//			assertTrue(false);
+//		}
+//	}
+//	
+//	@Test
+//	public void testGetUserprofile() {
+//		try {
+//			Idme idme = new Idme(testToken, ssiHost);
+//			JSONObject jo = idme.getUserProfile();
+//			assertNotNull(jo);
+//			System.out.println(jo);
+//		} catch (IdmeException e) {
+//			e.printStackTrace();
+//			assertTrue(false);
+//		}
+//	}
 	
 //	@Test
 //	public void TestSSICache() {

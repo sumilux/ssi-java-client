@@ -10,11 +10,15 @@
 		String token = request.getParameter("ssi_token");
 		request.getSession().setAttribute("ssi_token", token);
 		Idme idme = new Idme(token);
-		System.out.println(idme.getUserProfile().toString());
 		jo = idme.getUserProfile();
-		authSource = idme.getMyAuthSource();
+		System.out.println(jo.toString());
+		jo = idme.getUserProfile();
+		authSource = "dummy";
 	} else {
 		errorMsg = request.getParameter("errMsg");
+	}
+	if(stat == null) {
+		System.out.println("stat is null");
 	}
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -23,17 +27,17 @@
 <link type="text/css" rel="stylesheet" href="http://ssi.sumilux.com/ssi/download/ssi.css">
 <script type="text/javascript">
 window.SSI={
-    tokenUrl:"http://localhost:8090/ssi/index.jsp", // replace __TOKEN_URL__ with your own callback URL
-    appName:"SSISample",
-    sig:"5380bc1d3002d4cd9e59151edf5247b2",
-    owaUrl:"https://social-sign-in.com/smx/owa",
+    tokenUrl:"http://dev95.sumilux.com:8090/ssi/index.jsp", // replace __TOKEN_URL__ with your own callback URL
+    appName:"gnt",
+    sig:"99d7805cc0aefbb688b11d40485fe50a",
+    owaUrl:"http://dev95.sumilux.com:8670/smx/owa",
     v:"v0.7.15",
     style:"small-icon",
     options:{}
 };
 (function(){
     var f=document.createElement("script");
-    f.type="text/javascript"; f.src="http://ssi.sumilux.com/ssi/download/ssi.js";
+    f.type="text/javascript"; f.src="http://dev95.sumilux.com:8670/smx/js/ssi.js";
     var h=document.getElementsByTagName("script")[0];
     h.parentNode.insertBefore(f, h);
 })();
